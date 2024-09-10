@@ -1,0 +1,138 @@
+#include <iostream>     // подключаем библиотеку iostream для работы с консолью
+#include <cmath>        // подключаем библиотеку cmath для работы с математическими выражениями
+
+using namespace std;    // подключаем пространство имен std, чтобы каждый раз к нему не обращаться
+
+// важно определять методы до их вызова, иначе компилятор выдаст ошибку, так как обращение к ней идет раньше инициализации
+#pragma region Методы
+
+// функция для задания 1.1 "Имя"
+void name() {
+	cout << "Задание 1.1 \"Имя\"" << endl;
+	cout << "Медведев Михаил Евгеньевич!" << endl;
+}
+
+// функция для задания 1.2 "Арифметика"
+void math() {
+	cout << "Задание 1.2 \"Арифметика\"" << endl;
+	double a, b;
+	cout << "Введите первое число" << endl;
+	cin >> a;
+	cout << "Введите второе число" << endl;
+	cin >> b;
+	cout << "a + b = " << a + b << endl << "a - b = " << a - b << endl << "a * b = " << a * b << endl;
+	if (b != 0)
+		cout << "a / b = " << a / b << endl;
+	else
+		cout << "Деление на 0" << endl;
+}
+
+// функция для задания 1.3 "Уравнение"
+void equation() {
+	cout << "Задание 1.3 \"Уравнение\"" << endl;
+	double b, c, x;
+	cout << "Введите b" << endl;
+	cin >> b;
+	cout << "Введите c" << endl;
+	cin >> c;
+	if (b != 0)
+		cout << "x = -c / b = " << -c / b << endl;
+	else
+		cout << "Деление на 0" << endl;
+}
+
+// функция для задания 1.4 "Ещё уравнение"
+// переделать эту штуку
+void moreEquation() {
+	cout << "Задание 1.4 \"Ещё уравнение\"" << endl;
+	double a, b, c;
+	cout << "Введите A" << endl;
+	cin >> a;
+	cout << "Введите B" << endl;
+	cin >> b;
+	cout << "Введите C" << endl;
+	cin >> c;
+	
+	if (a == 0)
+	{
+		cout << "Это уравнение не вида a * x^2 + bx + c = 0, но мы его решим)" << endl;
+
+		if (b != 0)
+			cout << "x = -c / b = " << -c / b << endl;
+		else
+			cout << "Деление на 0" << endl;
+
+		return;
+	}
+
+	if (b == 0) {
+		cout << "Это уравнение не вида a * x^2 + bx + c = 0, но мы его решим)" << endl;
+
+		double xInPow = -c / a;
+
+		if (xInPow < 0)
+			cout << "Нет корней. x^2 всегда >= 0" << endl;
+		else if (xInPow == 0)
+			cout << "x = 0" << endl;
+		else
+			cout << "x = ±" << sqrt(xInPow) << endl;
+
+		return;
+	}
+
+	double d = (b * b) - (4 * a * c);
+	if (d < 0) {
+		cout << "Квадратное уравнение не имеет решений (дискриминант меньше 0)" << endl;
+		return;
+	}
+
+	double x1 = (-b + (sqrt(d))) / (2 * a);
+	double x2 = (-b - (sqrt(d))) / (2 * a);
+	if (d == 0)
+		cout << "x = " << x1 << endl;
+	else
+		cout << "x1 = " << x1 << "\t" << "x2 = " << x2 << endl;
+}
+
+// функция для задание 1.5 "Лампа со шторой"
+void lampWithCurtains() {
+	cout << "Задание 1.4 \"Лампа со шторой\"" << endl;
+	bool isDay, curtainsOpen, lampOn, isLight;
+
+	cout << "Сейчас день? 1 - да, день; 0 - нет, ночь" << endl;
+	cin >> isDay;
+	cout << "Шторы открыты? 1 - открыты; 0 - закрыты" << endl;
+	cin >> curtainsOpen;
+	cout << "Лампа горит? 1 - горит; 0 - не горит" << endl;
+	cin >> lampOn;
+
+	isLight = (isDay && curtainsOpen) || lampOn;
+	if (isLight == 1)
+		cout << "В комнате светло!" << endl;
+	else
+		cout << "В комнате темно!" << endl;
+}
+
+#pragma endregion
+
+
+// точка входа в программу
+int main()
+{
+	setlocale(LC_ALL, "Russian");   // принудительно переводим консоль на русский язык
+
+	// задание 1.1
+	//name();
+
+	// задание 1.2
+	//math();
+
+	// задание 1.3
+	//equation();
+
+	// задание 1.4
+	//moreEquation();
+
+	// задание 1.5
+	lampWithCurtains();
+}
