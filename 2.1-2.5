@@ -1,0 +1,134 @@
+#define _USE_MATH_DEFINES
+
+#include <iostream>
+#include <cmath>
+
+using namespace std;
+
+#pragma region Методы
+
+void cone() {
+	double height, bigRadius, smallRadius, formative, v, s;
+
+	cout << "Введите высоту усеченного конуса: " << endl;
+	cin >> height;
+	cout << "Введите большой радиус усеченного конуса: " << endl;
+	cin >> bigRadius;
+	cout << "Введите малый радиус усеченного конуса: " << endl;
+	cin >> smallRadius;
+	cout << "Введите образующую усеченного конуса: " << endl;
+	cin >> formative;
+
+	cout << "V = " << 1 / 3 * M_PI * height * (pow(bigRadius, 2) + bigRadius * smallRadius + pow(smallRadius, 2)) << endl;
+	cout << "S = " << M_PI * (pow(bigRadius, 2) + formative*(bigRadius + smallRadius) + pow(smallRadius, 2)) << endl;
+}
+
+void branching() {
+	double a, x, w;
+
+	cout << "Введите a: ";
+	cin >> a;
+	cout << "Введите x" << endl;
+	cin >> x;
+
+	double abs_x = abs(x);
+
+	if (abs_x < 1) {
+		if (x == 0) {
+			cout << "Аргумент логарифма должен быть > 0" << endl;
+			return;
+		}
+
+		cout << "w = a * ln|x|" << endl;
+		cout << "w = " << a * log(abs_x);
+	}
+	if (abs_x >= 1) {
+		double sqrt_arg = a - pow(x, 2);
+		if (sqrt_arg < 0) {
+			cout << "Аргумент корня должен быть >= 0" << endl;
+			return;
+		}
+
+		cout << "w = sqrt(a - x^2)" << endl;
+		cout << "w = " << sqrt(sqrt_arg) << endl;
+	}
+}
+
+void function() {
+	double x, y, b, z;
+
+	cout << "Введите x: " << endl;
+	cin >> x;
+	cout << "Введите y: " << endl;
+	cin >> y;
+	cout << "Введите b: " << endl;
+	cin >> b;
+
+	double log_arg, sqrt_arg;
+	log_arg = b - y;
+	sqrt_arg = b - x;
+
+	if (log_arg > 0 && sqrt_arg >= 0) {
+		z = log(log_arg) * sqrt(sqrt_arg);
+		cout << z << endl;
+	}
+	else if (log_arg <= 0){
+		cout << "Аргумент логарифма (b - y) <= 0" << endl;
+	}
+	else if (sqrt_arg < 0) {
+		cout << "Аргумент корня (b - x) < 0" << endl;
+	}
+	else {
+		cout << "Аргумент логарифма(b - y) <= 0 и аргумент корня (b - x) < 0" << endl;
+	}
+}
+
+void order() {
+	double n;
+
+	cout << "Введите число N" << endl;
+	cin >> n;
+	cout << "Вывод 10-ти последовательных чисел, начиная с " << n << endl;
+	for (int i = n; i < n + 10; i++)
+	{
+		cout << i << endl;
+	}
+}
+
+void tabulation() {
+	
+	cout << "y = (x^2 - 2x + 2) / (x - 1)" << endl;
+
+	for (double x = -4; x <= 4; x += 0.5)
+	{
+		//cout << "x = " << x << endl;
+		if (x - 1 != 0) {
+			cout << "y = " << (pow(x, 2) - 2 * x + 2) / (x - 1) << " при x = " << x << endl;
+		}
+		else {
+			cout << "Знаменатель x - 1 = 0" << endl;
+		}
+	}
+}
+
+#pragma endregion
+
+
+int main() {
+	setlocale(LC_ALL, "Russian");
+
+	cout << "Задание 2.1 \"Конус\"" << endl;
+	cone();
+
+	cout << "Задание 2.2 \"Разветвление\"" << endl;
+	branching();
+
+	cout << "Задание 2.3 \"Функция\"" << endl;
+	function();
+
+	cout << "Задание 2.4 \"Порядок\"" << endl;
+	order();
+
+	cout << "Задание 2.5 \"Табуляция\"" << endl;
+	tabulation();
+}
