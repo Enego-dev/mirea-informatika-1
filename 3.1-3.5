@@ -1,0 +1,137 @@
+#include <iostream>
+#include <cmath>
+#include <fstream>
+#include <string>
+
+using namespace std;
+
+double getR(double p)
+{
+	return p / 100;
+}
+
+void loan1() {
+	double s, n, p, m;
+	cout << "Введите сумму займа S: ";
+	cin >> s;
+	cout << "Введите кол-во лет n: ";
+	cin >> n;
+	cout << "Введите процент p: ";
+	cin >> p;
+	double r = getR(p);
+
+	if (p < 0) {
+		cout << "Банк не может выдать кредит себе в убыток! Процент отрицательный! Отказано!" << endl << endl;
+		return;
+	}
+	else if (p == 0) {
+		m = s / (12 * n);
+	}
+	else {
+		m = (pow(1 + r, n) * s * r) / ((pow(1 + r, n) - 1) * 12);
+	}
+
+	cout << m << endl << endl;
+}
+
+void loan2() {
+	double s, m, n, r;
+	cout << "Введите сумму займа S: ";
+	cin >> s;
+	cout << "Введите ежемесячный платеж m: ";
+	cin >> m;
+	cout << "Введите количество лет n: ";
+	cin >> n;
+
+	if (abs(m - (s / (12 * n))) < 1) {
+		cout << "Вероятно, это беспроцентный заем" << endl;
+		cout << "p = 0" << endl;
+		return;
+	}
+
+	for (double p = 0.1; p < 100; p += 0.1) {
+		p = floor(p * 100) / 100;
+
+		r = getR(p);
+		if (abs(m - (pow(1 + r, n) * s * r) / ((pow(1 + r, n) - 1) * 12)) < 1) {
+			cout << "Неокругленный процент p = " << p << endl;
+			cout << "Вероятно, искомый процент p = " << round(p) << endl << endl;
+			return;
+		}
+	}
+
+	cout << "Процент не вычислен! Ошибка!" << endl << endl;
+}
+
+void printFile() {
+	string str;
+	fstream file{ "Task3.txt" };
+	if (file.is_open())
+	{
+		while (getline(file, str))
+		{
+			cout << str << endl;
+		}
+	}
+	else
+	{
+		cout << "Не удалось открыть текстовый файл!" << endl;
+	}
+
+	file.close();
+}
+
+void filter() {
+	string str;
+	fstream file{ "Task4.txt" };
+
+	if (file.is_open()) {
+		while (getline(file, str)) {
+			for (char c : str) {
+				if (isdigit(c)) {
+					cout << c;
+				}
+			}
+		}
+	}
+	else {
+		cout << "Не удалось открыть текстовый файл!" << endl;
+	}
+
+	file.close();
+}
+
+void alphabetSort() {
+	string inputContent, letters;
+	getline(cin, inputContent);
+	for (char c : inputContent) {
+		if (isalpha(c)) {
+			letters += c;
+		}
+	}
+	for (int i = 0; i < letters.length() - 1; i++) {
+		for (int j = i; j < letters.length() - 1; j++) {
+			if (letters[i] > letters[j + 1]) {
+				swap(letters[i], letters[j + 1]);
+			}
+		}
+	}
+
+	cout << letters << endl;
+}
+
+int main()
+{
+	setlocale(LC_ALL, "Rus");
+
+	printFile();
+	filter();
+	alphabetSort();
+
+	return 0;
+
+	while (true) {
+		//loan1();
+		//loan2();
+	}
+}
