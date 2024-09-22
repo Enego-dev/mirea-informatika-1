@@ -19,38 +19,40 @@ void cone() {
 	cout << "Введите образующую усеченного конуса: " << endl;
 	cin >> formative;
 
-	cout << "V = " << 1 / 3 * M_PI * height * (pow(bigRadius, 2) + bigRadius * smallRadius + pow(smallRadius, 2)) << endl;
-	cout << "S = " << M_PI * (pow(bigRadius, 2) + formative*(bigRadius + smallRadius) + pow(smallRadius, 2)) << endl;
+    double skobki1 = pow(bigRadius, 2) + bigRadius * smallRadius + pow(smallRadius, 2);
+    double skobki2 = pow(bigRadius, 2) + formative * (bigRadius + smallRadius) + pow(smallRadius, 2);
+
+	cout << "V = " << M_PI * height * skobki1 / 3 << endl;
+	cout << "S = " << M_PI * skobki2<< endl;
 }
 
 void branching() {
 	double a, x, w;
 
-	cout << "Введите a: ";
-	cin >> a;
-	cout << "Введите x" << endl;
+	cout << "Введите x: " << endl;
 	cin >> x;
+	cout << "Введите a: " << endl;
+	cin >> a;
 
 	double abs_x = abs(x);
 
 	if (abs_x < 1) {
 		if (x == 0) {
-			cout << "Аргумент логарифма должен быть > 0" << endl;
+			cout << "Аргумент логарифма должен быть > 0, невозможно вычислить!" << endl;
 			return;
 		}
 
-		cout << "w = a * ln|x|" << endl;
-		cout << "w = " << a * log(abs_x);
+		cout << "w = a * ln|x| = " << a * log(abs_x) << endl;
+		return;
 	}
 	if (abs_x >= 1) {
 		double sqrt_arg = a - pow(x, 2);
 		if (sqrt_arg < 0) {
-			cout << "Аргумент корня должен быть >= 0" << endl;
+			cout << "Под корнем должно быть выражение >= 0, невозможно вычислить!" << endl;
 			return;
 		}
 
-		cout << "w = sqrt(a - x^2)" << endl;
-		cout << "w = " << sqrt(sqrt_arg) << endl;
+		cout << "w = sqrt(a - x^2) = " << sqrt(sqrt_arg) << endl;
 	}
 }
 
@@ -73,13 +75,13 @@ void function() {
 		cout << z << endl;
 	}
 	else if (log_arg <= 0){
-		cout << "Аргумент логарифма (b - y) <= 0" << endl;
+		cout << "Аргумент логарифма (b - y) <= 0, невозможно вычислить!" << endl;
 	}
 	else if (sqrt_arg < 0) {
-		cout << "Аргумент корня (b - x) < 0" << endl;
+		cout << "Аргумент корня (b - x) < 0Б невозможно вычислить!" << endl;
 	}
 	else {
-		cout << "Аргумент логарифма(b - y) <= 0 и аргумент корня (b - x) < 0" << endl;
+		cout << "Аргумент логарифма(b - y) <= 0 и аргумент корня (b - x) < 0, невозможно вычислить!" << endl;
 	}
 }
 
@@ -88,7 +90,11 @@ void order() {
 
 	cout << "Введите число N" << endl;
 	cin >> n;
-	cout << "Вывод 10-ти последовательных чисел, начиная с " << n << endl;
+	cout << "Вывод 10-ти последовательных НАТУРАЛЬНЫХ чисел, начиная с " << n << endl;
+	if(n < 1){
+	    n = 1;
+	}
+	n = ceil(n);
 	for (int i = n; i < n + 10; i++)
 	{
 		cout << i << endl;
@@ -106,7 +112,7 @@ void tabulation() {
 			cout << "y = " << (pow(x, 2) - 2 * x + 2) / (x - 1) << " при x = " << x << endl;
 		}
 		else {
-			cout << "Знаменатель x - 1 = 0" << endl;
+			cout << "При x = 1 знаменатель равен 0, значение функции не существует!" << endl;
 		}
 	}
 }
