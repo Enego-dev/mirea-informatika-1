@@ -1,0 +1,564 @@
+#define _USE_MATH_DEFINES
+
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <cmath>
+#include <Windows.h>
+
+using namespace std;
+
+
+
+void file() {
+	double sum = 0;
+
+	// Ввод чисел
+	ofstream out("Task1.txt", ios_base::out);
+	if (out.is_open()) {
+		cout << "Введите 10 чисел" << endl;
+		for (short i = 0; i < 10; i++) {
+			double digit;
+			if (cin >> digit) {
+				out << digit << endl;
+			}
+			else {
+				cout << "Вы ввели не число! Повторите попытку снова!" << endl;
+				return;
+			}
+		}
+	}
+	out.close();
+	// Ввод чисел
+
+
+
+	// Чтение чисел и их суммирование
+	ifstream in("Task1.txt");
+	if (in.is_open()) {
+		string y;
+		while (getline(in, y)) {
+			sum += atoi(y.c_str());
+		}
+	}
+	in.close();
+	cout << "Сумма всех чисел = " << sum << endl;
+	// Чтение чисел и их суммирование
+}
+
+
+
+void custom_sign() {
+	cout << "Введите число: ";
+	double x;
+	cin >> x;
+	short sign;
+	if (x > 0)
+		sign = 1;
+	else if (x == 0)
+		sign = 0;
+	else
+		sign = -1;
+	cout << "Знак введенного числа " << x << " равен " << sign << endl;
+}
+
+
+
+void rect() {
+	double a, b;
+	cout << "Введите сторону a прямоугольника: ";
+	cin >> a;
+	cout << "Введите сторону b прямоугольника: ";
+	cin >> b;
+
+	if (a <= 0 || b <= 0) {
+		cout << "Нельзя вычислить площадь прямоугольника со сторонами " << a << "x" << b << endl;
+		return;
+	}
+
+	cout << "Площадь прямоугольника со сторонами " << a << "x" << b << " равна " << a * b << endl;
+}
+void triangle() {
+	double a, b, c, p, s;
+	cout << "Введите сторону a треугольника: ";
+	cin >> a;
+	cout << "Введите сторону b треугольника: ";
+	cin >> b;
+	cout << "Введите сторону c треугольника: ";
+	cin >> c;
+
+	if (a <= 0 || b <= 0 || c <= 0 || a + b <= c || a + c <= b || b + c <= a) {
+		cout << "Нельзя вычислить площадь несуществующего треугольника!" << endl;
+		return;
+	}
+
+	p = (a + b + c) / 2;
+	s = sqrt(p * (p - a) * (p - b) * (p - c));
+	cout << "Площадь треугольника со сторонами " << a << "x" << b << "x" << c << " равна " << s << endl;
+}
+void circle() {
+	double r;
+	cout << "Введите радиус окружности: ";
+	cin >> r;
+	if (r <= 0) {
+		cout << "Окружности с радиусом " << r << " не существует!" << endl;
+		return;
+	}
+
+	cout << "Площадь окружности с радиусом " << r << " равнна " << M_PI * pow(r, 2) << endl;
+}
+
+void squares() {
+	short squareType;
+	cout << "Площадь прямоугольника - 1, площадь треугольника - 2, площадь круга - 3" << endl;
+	cin >> squareType;
+	switch (squareType)
+	{
+	case 1:
+		rect();
+		break;
+	case 2:
+		triangle();
+		break;
+	case 3:
+		circle();
+		break;
+	default:
+		cout << "Введите корректный номер операции!" << endl;
+		break;
+	}
+}
+
+
+
+void glory() {
+	for (short lines = 0; lines < 13; lines++) {
+		for (short columns = 0; columns < 30; columns++) {
+			char c = '-';
+			if (columns < 8 && lines < 6)
+				c = '*';
+			cout << c << ' ';
+		}
+		cout << endl;
+	}
+}
+
+
+
+void print_sin() {
+	const short width = 120;
+	const short height = 26;
+	char arr[height][width];
+
+	// Инициализация массива символов
+	for (int y = 0; y < height; y++) {
+		for (int x = 0; x < width; x++) {
+			if (x == width - 1) {
+				arr[y][x] = '\n';
+				continue;
+			}
+			if (y == height / 2) {
+				arr[y][x] = '—';
+				continue;
+			}
+
+			arr[y][x] = ' ';
+		}
+	}
+
+	// вычисляем синус, заносим в массив символов
+	for (short x = 0; x < width - 1; x++) {
+		double cor_sin_x = round(sin(M_PI * x / 40) * 100) / 100;
+		auto a = floor(abs(cor_sin_x) * 10);
+		a = min(a, 10);
+		if (cor_sin_x < 0)
+			a = -a;
+		//cout << cor_sin_x << " -> " << a << endl;
+		short y1 = height / 2 - a;
+		arr[y1][x] = '*';
+	}
+	
+	// выводим массив
+	for (short y = 0; y < height; y++) {
+		for (short x = 0; x < width; x++) {
+			cout << arr[y][x];
+		}
+	}
+}
+
+
+
+int convert_roman_to_arabic(char c){
+	switch (c)
+	{
+		case 'I':
+			return 1;
+			break;
+		case 'V':
+			return 5;
+			break;
+		case 'X':
+			return 10;
+			break;
+		case 'L':
+			return 50;
+			break;
+		case 'C':
+			return 100;
+			break;
+		case 'D':
+			return 500;
+			break;
+		case 'M':
+			return 1000;
+			break;
+		default:
+			cout << "Символ не распознан!, переданный символ - " << c << endl;
+			return -1;
+			break;
+	}
+}
+void decode_roman_numbers() {
+	string str = "";
+	cin >> str;
+
+	int sum = 0, lastDigit = 0;
+	
+	for (int i = str.length() - 1; i >= 0; i--) {
+		if (convert_roman_to_arabic(str[i]) >= lastDigit) {
+			sum += convert_roman_to_arabic(str[i]);
+		}
+		else {
+			sum -= convert_roman_to_arabic(str[i]);
+		}
+
+		lastDigit = convert_roman_to_arabic(str[i]);
+	}
+
+	cout << str << " = " << sum << endl;
+}
+
+
+
+void pseudo_generator() {
+	int i;
+
+	int m1 = 37;
+	int b1 = 3;
+	int c1 = 64;
+
+	int m2 = 25173;
+	int b2 = 13849;
+	int c2 = 65537;
+
+	int arr1[1000];
+	int arr2[1000];
+
+	cout << "Введите i: ";
+	cin >> i;
+
+	if (i < 0) {
+		cout << "i должен быть >= 0" << endl;
+		return;
+	}
+
+	cout << "--------------" << endl;
+	cout << "Первый вариант: " << endl;
+	for (int new_i = 0; new_i <= i; new_i++) {
+
+		if (new_i == 0) {
+			arr1[0] = 0;
+			cout << arr1[0] << endl;
+			continue;
+		}
+		
+		arr1[new_i] = (m1 * arr1[new_i - 1] + b1) % c1;
+		cout << arr1[new_i] << endl;
+	}
+
+	cout << "--------------" << endl;
+	cout << "Второй вариант: " << endl;
+
+	for (int new_i = 0; new_i <= i; new_i++) {
+
+		if (new_i == 0) {
+			arr2[0] = 0;
+			cout << arr2[0] << endl;
+			continue;
+		}
+
+		arr2[new_i] = (m2 * arr2[new_i - 1] + b2) % c2;
+		cout << arr2[new_i] << endl;
+	}
+}
+
+
+
+void matrix_multiply() {
+	// 1 вопрос - определить номер продавца по а) макс выручке;    б) мин выручке
+	// 2 вопрос - определить номер продавца по а) макс комиссионным;    б) мин комиссионным
+	// 3 вопрос - сумма выручки
+	// 4 вопрос - сумма комиссионки
+	// 5 вопрос - сумма выручки + комиссионки
+	double a[3][4] = {
+		{5, 2, 0, 10},
+		{3, 5, 2, 5},
+		{20, 0, 0, 0}
+	};
+	double b[4][2] = {
+		{1.20, 0.50},
+		{2.80, 0.40},
+		{5.00, 1.00},
+		{2.00, 1.50}
+	};
+
+	double c[3][2] = {};
+
+	// матрица a * матрица b = матрица c
+	for (int i = 0; i < 3; i++) {
+		for (int j = 0; j < 2; j++) {
+			for (int k = 0; k < 4; k++) {
+				c[i][j] += a[i][k] * b[k][j];
+			}
+		}
+	}
+
+	//выводим матрицу c
+	for (int m = 0; m < 3; m++) {
+		for (int n = 0; n < 2; n++) {
+			cout << c[m][n] << '\t';
+		}
+		cout << endl;
+	}
+
+	cout << "------------------------" << endl;
+
+	// 1 и 2 вопрос - определить номер продавца по а) макс выручке, макс комиссионных;    б) мин выручке, мин комиссионных
+	cout << endl << "Вопрос 1." << endl;
+	double numMaxEarnings = 0, numMinEarnings = 0;
+	double maxEarnings = 0, minEarnings = 1000000;
+
+	double numMaxComiss = 0, numMinComiss = 0;
+	double maxComiss = 0, minComiss = 10000000;
+
+	double sumEarnings = 0, sumComiss = 0;
+
+	// сначала определяем максимальную и минимальную выручки и комиссионные
+	for (int i = 0; i < 3; i++) {
+		sumEarnings += c[i][0];
+		sumComiss += c[i][1];
+
+		maxEarnings = max(maxEarnings, c[i][0]);
+		minEarnings = min(minEarnings, c[i][0]);
+
+		maxComiss = max(maxComiss, c[i][1]);
+		minComiss = min(minComiss, c[i][1]);
+	}
+
+	// теперь сравниваем максимальную и минимальную выручки и комиссионные с номером продавца
+	for (int i = 0; i < 3; i++) {
+		if (c[i][0] == maxEarnings) {
+			numMaxEarnings = i + 1;
+		}
+		if (c[i][0] == minEarnings) {
+			numMinEarnings = i + 1;
+		}
+		if (c[i][1] == maxComiss) {
+			numMaxComiss = i + 1;
+		}
+		if (c[i][1] == minComiss) {
+			numMinComiss = i + 1;
+		}
+	}
+
+	cout << "Продавец " << numMaxEarnings << " выручил больше всего денег с продажи : " << maxEarnings << endl;
+	cout << "Продавец " << numMinEarnings << " выручил меньше всего денег с продажи : " << minEarnings << endl;
+
+	cout << endl << "Вопрос 2." << endl;
+	cout << "Продавец " << numMaxComiss << " получил больше всего комиссионных: " << maxComiss << endl;
+	cout << "Продавец " << numMinComiss << " получил меньше всего комиссионных: " << minComiss << endl;
+
+	cout << endl << "Вопрос 3." << endl;
+	cout << "Общая вырученная сумма денег: " << sumEarnings << endl;
+
+	cout << endl << "Вопрос 4." << endl;
+	cout << "Всего комиссионных: " << sumComiss << endl;
+
+	cout << endl << "Вопрос 5." << endl;
+	cout << "Общая сумма денег, прошедшая через продавцов: " << sumEarnings + sumComiss << endl;
+}
+
+
+
+int char_to_int(char c) {
+	switch (c) {
+	case '0':
+		return 0;
+	case '1':
+		return 1;
+	case '2':
+		return 2;
+	case '3':
+		return 3;
+	case '4':
+		return 4;
+	case '5':
+		return 5;
+	case '6':
+		return 6;
+	case '7':
+		return 7;
+	case '8':
+		return 8;
+	case '9':
+		return 9;
+	case 'A':
+		return 10;
+	case 'B':
+		return 11;
+	case 'C':
+		return 12; 
+	case 'D':
+		return 13;
+	case 'E':
+		return 14;
+	case 'F':
+		return 15;
+	}
+	cout << "чет не то" << endl;
+	return -1;
+}
+string int_to_char(int i) {
+	switch (i) {
+	case 0:
+		return "0";
+	case 1:
+		return "1";
+	case 2:
+		return "2";
+	case 3:
+		return "3";
+	case 4: 
+		return "4";
+	case 5: 
+		return "5";
+	case 6:
+		return "6";
+	case 7:
+		return "7";
+	case 8:
+		return "8";
+	case 9:
+		return "9";
+	case 10:
+		return "A";
+	case 11:
+		return "B";
+	case 12:
+		return "C";
+	case 13:
+		return "D";
+	case 14:
+		return "E";
+	case 15:
+		return "F";
+	}
+	return "";
+}
+string reverse_str(string str) {
+	string res = "";
+	for (int i = str.length() - 1; i >= 0; i--) {
+		res += str[i];
+	}
+	return res;
+}
+int to_10(string num, int base) {
+	short len = num.length() - 1;
+	int res = 0;
+	for (int i = 0; i < num.length(); i++) {
+		res += char_to_int(num[i]) * pow(base, len--);
+	}
+	return res;
+}
+string to_cc(int num, int base) {
+	string res = "";
+	while (num > 0) {
+		res += int_to_char(num % base);
+		num /= base;
+	}
+	return reverse_str(res);
+}
+void convert_to_cc() {
+	int old_base = 0;
+	int new_base = 0;
+	string num = "";
+
+	cout << "Введите число: ";
+	cin >> num;
+	cout << "Старое основание: ";
+	cin >> old_base;
+	cout << "Новое основание: ";
+	cin >> new_base;
+
+	if (num == "0") {
+		cout << "Число 0 в любой системе счисления равно 0" << endl;
+		return;
+	}
+
+	if (!(2 <= old_base && old_base <= 16) || !(2 <= new_base && new_base <= 16)) {
+		cout << "Введите системы счисления от 2 до 16 включительно!" << endl;
+		return;
+	}
+
+	int in10 = to_10(num, old_base);
+	string in_new_base = to_cc(in10, new_base);
+	cout << "Число " << num << " по основанию " << old_base << " равно " << in_new_base << " по основанию " << new_base << endl;
+}
+
+int main()
+{
+	setlocale(0, "");
+
+	//file();
+	
+
+
+	/*while (true) {
+		custom_sign();
+		cout << endl;
+	}*/
+
+
+
+	/*while (true) {
+		squares();
+		cout << endl;
+	}*/
+
+
+
+	//glory();
+
+
+
+	//print_sin();
+
+	
+
+	/*while (true) {
+		decode_roman_numbers();
+		cout << endl;
+	}*/
+
+
+
+	//pseudo_generator();
+
+
+
+	//matrix_multiply();
+
+
+
+	//convert_to_cc();
+}
