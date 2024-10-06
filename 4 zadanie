@@ -4,7 +4,6 @@
 #include <fstream>
 #include <string>
 #include <cmath>
-#include <Windows.h>
 
 using namespace std;
 
@@ -31,14 +30,14 @@ void file() {
 	out.close();
 	// Ввод чисел
 
-
+    cout << "Запись в файл окончена. Закрываем поток!" << endl;
 
 	// Чтение чисел и их суммирование
 	ifstream in("Task1.txt");
 	if (in.is_open()) {
 		string y;
 		while (getline(in, y)) {
-			sum += atoi(y.c_str());
+			sum += stod(y);
 		}
 	}
 	in.close();
@@ -51,7 +50,11 @@ void file() {
 void custom_sign() {
 	cout << "Введите число: ";
 	double x;
-	cin >> x;
+	if(!(cin >> x)){
+	    cout << "Вы ввели не число! Повторите попытку!" << endl;
+	    return;
+	}
+	
 	short sign;
 	if (x > 0)
 		sign = 1;
@@ -107,7 +110,6 @@ void circle() {
 
 	cout << "Площадь окружности с радиусом " << r << " равнна " << M_PI * pow(r, 2) << endl;
 }
-
 void squares() {
 	short squareType;
 	cout << "Площадь прямоугольника - 1, площадь треугольника - 2, площадь круга - 3" << endl;
@@ -158,7 +160,7 @@ void print_sin() {
 				continue;
 			}
 			if (y == height / 2) {
-				arr[y][x] = '—';
+				arr[y][x] = '-';
 				continue;
 			}
 
@@ -168,9 +170,9 @@ void print_sin() {
 
 	// вычисляем синус, заносим в массив символов
 	for (short x = 0; x < width - 1; x++) {
-		double cor_sin_x = round(sin(M_PI * x / 40) * 100) / 100;
+		double cor_sin_x = round(sin(M_PI * x / 26) * 100) / 100;
 		auto a = floor(abs(cor_sin_x) * 10);
-		a = min(a, 10);
+		a = a > 10 ? 10 : a;
 		if (cor_sin_x < 0)
 			a = -a;
 		//cout << cor_sin_x << " -> " << a << endl;
@@ -191,6 +193,9 @@ void print_sin() {
 int convert_roman_to_arabic(char c){
 	switch (c)
 	{
+	    case '-':
+	        return 0;
+	        break;
 		case 'I':
 			return 1;
 			break;
@@ -213,28 +218,58 @@ int convert_roman_to_arabic(char c){
 			return 1000;
 			break;
 		default:
-			cout << "Символ не распознан!, переданный символ - " << c << endl;
 			return -1;
 			break;
 	}
 }
 void decode_roman_numbers() {
+    cout << "Введите римское число: ";
 	string str = "";
 	cin >> str;
 
 	int sum = 0, lastDigit = 0;
 	
 	for (int i = str.length() - 1; i >= 0; i--) {
-		if (convert_roman_to_arabic(str[i]) >= lastDigit) {
-			sum += convert_roman_to_arabic(str[i]);
+	    int roman_to_arabic = convert_roman_to_arabic(str[i]);
+	    if(roman_to_arabic == -1){
+	        cout << "Символ не распознан!, переданный символ - " << str[i] << ". Повторите попытку снова!" << endl;
+	        return;
+	    }
+	    
+	    if((lastDigit == 5 && roman_to_arabic == 5)  || (lastDigit == 50 && roman_to_arabic == 50) || (lastDigit == 500 && roman_to_arabic == 500)){
+	        cout << "Числа V, L, D не могут повторяться!" << endl;
+	        return;
+	    }
+	    
+	    if(roman_to_arabic == 1 || roman_to_arabic == 10 || roman_to_arabic == 100 || roman_to_arabic == 1000){
+	        int second = convert_roman_to_arabic(str[i - 1]);
+	        int third = convert_roman_to_arabic(str[i - 2]);
+	        int fourth = convert_roman_to_arabic(str[i - 3]);
+	        if(roman_to_arabic == second && second == third && third == fourth){
+	            cout << "Число повторяется более 3х раз, такого числа нет!" << endl;
+	            return;
+	        }
+	    }
+	    
+		if (roman_to_arabic >= lastDigit) {
+			sum += roman_to_arabic;
 		}
 		else {
-			sum -= convert_roman_to_arabic(str[i]);
+		    /*if(lastDigit == 0){
+		        sum -= roman_to_arabic;
+		        continue;
+		    }*/
+		    if(log10(lastDigit) - log10(roman_to_arabic) != 1){
+		        cout << "Некорректное число " << str << endl;
+		        return;
+		    }
+			sum -= roman_to_arabic;
 		}
 
-		lastDigit = convert_roman_to_arabic(str[i]);
+		lastDigit = roman_to_arabic;
 	}
-
+	if(str[0] == '-')
+        sum = - sum;
 	cout << str << " = " << sum << endl;
 }
 
@@ -500,9 +535,26 @@ void convert_to_cc() {
 	cout << "Новое основание: ";
 	cin >> new_base;
 
+    if(num[0] == '-'){
+        cout << "Символ должен присутствовать в этой системе счисления!" << endl;
+        return;
+    }
+
 	if (num == "0") {
 		cout << "Число 0 в любой системе счисления равно 0" << endl;
 		return;
+	}
+	
+	int max_num = 0;
+	for(char c : num){
+	    int max_num_1 = char_to_int(c);
+	    if (max_num_1 > max_num)
+	        max_num = max_num_1;
+	}
+	
+	if(max_num >= old_base){
+	    cout << "Это число не может быть записано в системе счисления по основанию " << old_base << endl;
+	    return;
 	}
 
 	if (!(2 <= old_base && old_base <= 16) || !(2 <= new_base && new_base <= 16)) {
@@ -521,44 +573,19 @@ int main()
 
 	//file();
 	
+	//custom_sign();
 
-
-	/*while (true) {
-		custom_sign();
-		cout << endl;
-	}*/
-
-
-
-	/*while (true) {
-		squares();
-		cout << endl;
-	}*/
-
-
+	//squares();
 
 	//glory();
 
-
-
 	//print_sin();
 
-	
-
-	/*while (true) {
-		decode_roman_numbers();
-		cout << endl;
-	}*/
-
-
+	decode_roman_numbers();
 
 	//pseudo_generator();
 
-
-
 	//matrix_multiply();
-
-
 
 	//convert_to_cc();
 }
