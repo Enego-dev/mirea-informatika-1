@@ -1,0 +1,178 @@
+#include <iostream>     // поток консоли
+#include <vector>       // векторы
+#include <string>       // строки
+#include <fstream>      // файлы
+#include <algorithm>    // sort()
+
+using namespace std;
+
+// 18)Написать программу, которая создаст файл phone.txt с информацией : фамилия и номер телефона нескольких ваших товарищей.
+// Программа должна запрашивать фамилию человека и выводить его телефон.
+// Если в справочнике есть одинаковые фамилии, то программа должна вывести список всех людей, имеющих эти фамилии.
+// В другом файле организовать отсортированные по фамилиям данные исходного файла.
+
+const string FILENAME = "phone.txt";
+const string SORTEDFILENAME = "sorted_phone.txt";
+
+class Person {
+public:
+    string LastName;
+    string Phone;
+
+    Person(string lastName, string phone) {
+        LastName = lastName;
+        Phone = phone;
+    }
+
+    void print() {
+        cout << LastName << " - " << Phone << endl;
+    }
+
+    string getString() {
+        return LastName + " - " + Phone;
+    }
+};
+
+void init_phoneList() {
+    vector<Person> contacts;
+    cout << "Для записи контакта введите фамилию, нажмите Enter, введите телефон и ещё раз нажмите Enter.\nДля прекращения записи оставьте любое поле пустым." << endl;
+
+    // Сбрасываем файл
+    ofstream write(FILENAME, ios_base::out);
+    if (write.is_open()) {
+        write << "";
+    }
+    write.close();
+
+    // Начинаем запись контактов
+    while (true) {
+        string lastName;
+        string phone;
+        cin >> lastName;
+        cin >> phone;
+        //89060370601
+        if (lastName.empty() || phone.empty()) {
+            break;
+        }
+        if (phone.length() != 11) {
+            cout << "Длина телефона составляет 11 символов! Прекращаем запись контактов." << endl;
+            break;
+        }
+        for (char& c : phone) {
+            if (!isdigit(c)) {
+                cout << "Неправильно набран номер. Прекращаем запись контактов." << endl;
+                break;
+            }
+        }
+
+        Person person(lastName, phone);
+        contacts.push_back(person);
+    }
+
+    // Записываем в файл список контактов
+    write.open(FILENAME, ios_base::app);
+    if (write.is_open()) {
+        for (Person& p : contacts) {
+            write << p.getString() << endl;
+        }
+    }
+    write.close();
+}
+
+Person parseLine(string line) {
+    // Medvedev - 89060370601
+    auto tirePos = line.find("-");
+    string lastName = line.substr(0, tirePos - 1);
+    string phone = line.substr(tirePos + 2, line.length());
+    Person person(lastName, phone);
+    return person;
+}
+
+vector<Person> getPhoneList(bool printInConsole = false) {
+    vector<Person> contacts;
+
+    // читаем phone.txt и вносим в массив
+    string line;
+    ifstream read(FILENAME);
+    if (read.is_open()) {
+        while (getline(read, line)) {
+            contacts.push_back(parseLine(line));
+        }
+    }
+    read.close();
+
+    // выводим контакты
+    if (printInConsole) {
+        for (Person& contact : contacts) {
+            contact.print();
+        }
+    }
+
+    // Возвращаем массив контактов
+    return contacts;
+}
+
+bool comparer(Person a, Person b) {
+    return a.LastName < b.LastName;
+}
+void sortPhoneList(bool printInConsole = false) {
+    auto contacts = getPhoneList();
+
+    // сортируем
+    sort(contacts.begin(), contacts.end(), comparer);
+
+    // записываем в файл sorted_phone.txt
+    ofstream write(SORTEDFILENAME);
+    if (write.is_open()) {
+        for (Person& contact : contacts) {
+            write << contact.getString() << endl;
+        }
+    }
+    write.close();
+
+    // выводим контакты в консоль
+    if (printInConsole) {
+        for (Person& contact : contacts) {
+            contact.print();
+        }
+    }
+}
+
+int main()
+{
+    setlocale(0, "");
+
+    sortPhoneList();
+
+    // Для инициализации файла phone.txt - раскомментировать вызов этого метода!
+    //init_phoneList();
+
+    // Отображение телефонной книги
+    auto contacts = getPhoneList();
+
+    cout << endl << endl << "====================" << endl;
+    cout << "Введите фамилию: ";
+    string lastName;
+    getline(cin, lastName);
+    cout << endl;
+
+    vector<Person> compares;
+    for (Person& contact : contacts) {
+        if (contact.LastName.find(lastName) != string::npos) {
+            compares.push_back(contact);
+        }
+    }
+
+    if (compares.size() == 1) {
+        cout << "Номер телефона: " << compares[0].Phone << endl;
+    }
+    else if (compares.size() < 1) {
+        cout << "Совпадений не найдено." << endl;
+    }
+    else {
+        cout << "Вот, что мы нашли:" << endl;
+        for (Person& contact : compares) {
+            cout << contact.LastName << endl;
+        }
+    }
+}
