@@ -1,0 +1,166 @@
+#include <iostream>
+#include <cmath>
+#include <fstream>
+#include <string>
+#include <vector>
+
+using namespace std;
+
+void euclid_1() {
+    int a, b, first, second, q, r;
+    cin >> a >> b;
+    first = abs(a);
+    second = abs(b);
+    if (second > first) {
+        swap(first, second);
+    }
+
+    r = first / second;
+    while (r != 0) {
+        //cout << "a = " << first << "\t" << "b = " << second << endl;
+        q = first / second;
+        r = first % second;
+        first = second;
+        if (r == 0) {
+            cout << "НОД делением (" << a << ", " << b << ") = " << second << endl;
+            return;
+        }
+        second = r;
+    }
+}
+void euclid_2() {
+    int a, b;
+    cin >> a >> b;
+    cout << "НОД вычитанием (" << a << ", " << b << ") = ";
+    a = abs(a);
+    b = abs(b);
+    if (b > a) {
+        swap(a, b);
+    }
+
+    while (a != b) {
+        if (a > b) {
+            a -= b;
+        }
+        else {
+            b -= a;
+        }
+    }
+    cout << a << endl;
+}
+
+
+bool isPrime(int n) {
+    for (int i = 2; i * i <= n; i++) {
+        if (n % i == 0) {
+            return false;
+        }
+    }
+    return true;
+}
+void resheto_eratosphena() {
+    int n;
+    cin >> n;
+
+    for (int i = 2; i <= n; i++) {
+        if (isPrime(i))
+        {
+            cout << i << endl;
+        }
+    }
+}
+
+
+void obrabotka_12() {
+    string line;
+    ifstream read("СЮДА НАЗВАНИЕ!!!");
+    if (read.is_open()) {
+        while (getline(read, line)) {
+            cout << line;
+        }
+    }
+    read.close();
+}
+void obrabotka_13() {
+    string curLine;
+    vector<string> strVector;
+    ofstream write("t2.txt", ios_base::app);
+
+    cout << "Введите текст:" << endl;
+    while (getline(cin, curLine)) {
+        if (curLine.empty()) {
+            break;
+        }
+        strVector.push_back(curLine);
+    }
+
+    if (write.is_open()) {
+        for (string& line : strVector) {
+            write << line << endl;
+        }
+    }
+}
+
+
+void rows_35() {
+    int currentSpaces = 0;
+    int maxSpaces = 0;
+
+    cout << "Введите строку: " << endl;
+    string line;
+    getline(cin, line);
+
+    for (char& c : line) {
+        if (c == ' ') {
+            currentSpaces++;
+        }
+        if (c != ' ') {
+            maxSpaces = max(currentSpaces, maxSpaces);
+            currentSpaces = 0;
+        }
+    }
+
+    cout << "Максимальное количество подряд идущих пробелов: " << maxSpaces << endl;
+}
+void rows_36() {
+    int maxLenght = 0;
+    string wideString;
+    vector<string> words;
+    string line;
+    getline(cin, line);
+    auto pos = line.find(" ");
+    while ((pos = line.find(" ")) != string::npos) {
+        words.push_back(line.substr(0, pos));
+        line.erase(0, pos + 1); // pos + 1, чтобы убрать лишний пробел и начать следующее слово с буквы, а не пробела
+    }
+    words.push_back(line); // добавляем слово, которое не записалось в массив в цикле while
+    for (auto& word : words) {
+        cout << word << endl;
+        maxLenght = max(maxLenght, static_cast<int>(word.length()));
+    }
+    for (auto& word : words) {
+        if (word.length() == maxLenght)
+            wideString = word;
+    }
+    cout << "Самое длинное слово: " << wideString << " - " << maxLenght << " символов" << endl;
+}
+
+
+int main()
+{
+    setlocale(LC_ALL, "Russian");
+
+    //euclid_1();
+    //euclid_2();
+
+
+    //resheto_eratosphena();
+
+
+    //obrabotka_12();
+    //obrabotka_13();
+
+
+    //rows_35();
+    //rows_36();
+}
